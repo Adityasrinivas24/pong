@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import sys
 
 pygame.init()
 
@@ -10,17 +11,19 @@ window_width,window_height = 900,600
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('PONG')
 
-font = pygame.font.SysFont("Comic Sans MS", 25, True)
+font = pygame.font.SysFont("ubuntumono", 20, True)
+font2 = pygame.font.SysFont("ubuntumono", 35, True)
 
 paddle_color = (255, 255, 255)
 ball_color = (50,255,255)
 white = paddle_color
 black = (0, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 128)
 
 
 clock = pygame.time.Clock()
 frame_rate = 30
-
 
 #Ball Class
 class Ball:
@@ -122,11 +125,15 @@ def draw_lines():
 
         pygame.draw.line(window, white,(window_width // 2, y + line_length // 2 + gap_length),(window_width // 2, y + line_length), line_thickness)
 
+def draw_text(text,font,x,y):
+    text = font.render(text, True,blue,green)
+    window.blit(text, (x,y))
 
 
 #Game
 def main():
-    run = True
+    running = False
+    click = True
 
     paddle1 = Paddle(20, 0, 10, 100, 10, paddle_color)
     paddle2 = Paddle(window_width -30, 0, 10, 100, 10, paddle_color)
@@ -136,12 +143,26 @@ def main():
     paddle1Score,paddle2Score = 0, 0
     paddle1Yfac, paddle2Yfac = 0, 0
 
-    while run:
-        window.fill(black)
-
+    while click:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                click = False
+                running = True
+
+        window.fill(black)
+        draw_text('Click Anywhere to Start', font2, window_width // 2 - 200 , window_height // 2 - 50 )
+        # draw_text('Use keys: W, S, Up, Down To handle Paddle',font, window_width // 3 , window_height // 3)
+        pygame.display.flip()
+
+
+    while running:
+        window.fill(black)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     paddle2Yfac = -1
@@ -185,9 +206,11 @@ def main():
 
         pygame.display.update()
         clock.tick(frame_rate)
+        pygame.display.flip()
 
 
 
 if __name__ == "__main__":
     main()
     pygame.quit()
+    sys.exit()
