@@ -1,12 +1,13 @@
+import sys
+import random
 import pygame
 from pygame.locals import *
-import sys
 
 pygame.init()
 
 #Game specifications
 
-window_width,window_height = 900,600
+window_width,window_height = 1000,600
 
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('PONG')
@@ -23,7 +24,7 @@ blue = (0, 0, 128)
 
 
 clock = pygame.time.Clock()
-frame_rate = 30
+frame_rate = 35
 
 #Ball Class
 class Ball:
@@ -59,9 +60,9 @@ class Ball:
             return 0
 
     def reset(self):
-        self.posx = window_width // 2
-        self.posy = window_height // 2
-        self.xFac *= -1
+        self.posx = (window_width // 2)
+        self.posy = (window_height // 2)
+        self.xFac *= random.choice([-1, 1])
         self.resetVar = 1
 
     def hit(self):
